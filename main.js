@@ -23,8 +23,12 @@ const productSafetyCheck = (currentMonthlyPayment, expectedLoanValue, productArr
     return returnedProducts;
 }
 
+
+// Helper Functions 
+// Created: Thomas Robinson
+/*
 /*Given: That products are rounded at two decimal places, since monetary GBP values are always rounded to two decimal places 
-**Custom test function** */
+**Custom helper function** */
 const calcRoundingIssues = (currentMonthlyPayment, expectedLoanValue, interest) => {
     var plus10 = currentMonthlyPayment + (currentMonthlyPayment / 10);
 
@@ -48,7 +52,7 @@ const calcRoundingIssues = (currentMonthlyPayment, expectedLoanValue, interest) 
 }
 /* Find the input values for the 1p difference condition, adjust values up and down seeing how it affects the difference.
 current test: Current: 500, Mortgage: 1000020
-**Custom test function** */
+**Custom helper function** */
 const findInputvalues1pDifference = (currentMonthlyPayment, expectedLoanValue, interest) => {
     current10pc = currentMonthlyPayment + (currentMonthlyPayment/10);
 

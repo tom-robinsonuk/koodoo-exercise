@@ -21,10 +21,13 @@ test('Ensure Repayment Mortgages are not filtered',() => {
     expect(productSafetyCheck(currentMonthlyPayment,loanValue,productList)).toEqual(expectedReturnedProducts)
 });
 
-/*Given:
-Repayment mortgage with current monthly payment of 0 (customer has no current mortgage)
+
+/* Although this isn't technically correct according to the defined business logic, the requirements don't
+ say whether customers always have an existing mortgage or not, therefore scenarios where they don't have one should be considered */
+
+/*Given: Repayment mortgage with current monthly payment of 0 (customer has no current mortgage)
 product should be returned
-using the index.js product list*/
+using the index.js product list
 test('Ensure Repayment mortgage with current monthly payment of 0, all products should be returned',() =>{
 
     const expectedReturnedProducts = productList
@@ -33,10 +36,12 @@ test('Ensure Repayment mortgage with current monthly payment of 0, all products 
 
     expect(productSafetyCheck(currentMonthlyPayment,loanValue,productList)).toEqual(expectedReturnedProducts)
 });
+*/
 
 /*Given: That the interest-only mortgage that is 10%  is also returned
 Test script fails: Criteria <10 which is 0 to 9 rather than 0 to 10
 */
+
 test('Interest-only products should be returned where the monthly payment works out at 10% difference to their current payment',() =>{
     const productList = [{
         productId:1,
@@ -113,8 +118,28 @@ test('Interest-only products should not be returned where the monthly payment is
     expect(productSafetyCheck(currentMonthlyPayment,loanValue,productList)).toEqual(expectedReturnedProducts)
 });
 
+/* Given: That products are rounded at two decimal places, since monetary GBP values are always rounded to two decimal places 
+**This test passes however the value for new monthly payment is  550.3333333 **/
+test('Should return correct products at two decimal places',() =>{
+    const productList = [{
+        productId:1,
+        repaymentType:"interest-only",
+        interestRate:0.01
+    }]
+
+    const expectedReturnedProducts = productList
+    const currentMonthlyPayment = 500.30;
+    const loanValue = 40000;
+
+    expect(productSafetyCheck(currentMonthlyPayment,loanValue,productList)).toEqual(expectedReturnedProducts)
+
+    // new monthly payment calculated as 550.333333333326
+}); 
+
+
+/* Helper script -  
 /*Given: That products are rounded at two decimal places, since monetary GBP values are always rounded to two decimal places 
-**Custom function** */
+**Custom function**
 test('should return correct product monthly payment at two decimal places',() =>{
     const productList = [{
         productId:1,
@@ -128,11 +153,13 @@ test('should return correct product monthly payment at two decimal places',() =>
     const interestRate = 0.01
     expect(calcRoundingIssues(currentMonthlyPayment,loanValue,interestRate)).toEqual(expectedReturnedProducts);
     // new monthly payment calculated as 550.333333333326
-});
+}); 
+*/
 
+/* Helper script -  
 /* Find the input values for the 1p difference condition, 
 function created for generating input values for use in testing
-**Custom function** */
+**Custom function**
 test('Should return the 1p difference input values',() =>{
 
     const currentMonthlyPayment = 500;
@@ -142,4 +169,4 @@ test('Should return the 1p difference input values',() =>{
 
     expect(findInputvalues1pDifference(currentMonthlyPayment,loanValue,interestRate)).toEqual(expectedReturnedProducts);
 });
-
+ */
