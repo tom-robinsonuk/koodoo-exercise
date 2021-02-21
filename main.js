@@ -46,10 +46,30 @@ const calcRoundingIssues = (currentMonthlyPayment, expectedLoanValue, interest) 
     console.log ("new monthly: " + new_monthly);
     return new_monthly;
 }
+/* Find the input values for the 1p difference condition, adjust values up and down seeing how it affects the difference.
+current test: Current: 500, Mortgage: 1000020
+**Custom test function** */
+const findInputvalues1pDifference = (currentMonthlyPayment, expectedLoanValue, interest) => {
+    current10pc = currentMonthlyPayment + (currentMonthlyPayment/10);
 
-
+    while(1){
+        var newMonthly = calculateMonthlyPayememt(expectedLoanValue, interest);
+        console.log (newMonthly)
+        
+        if (newMonthly > current10pc){
+           // console.log(newMonthly + " " +current10pc) // debug 
+           // console.log("interest: " + interest) // debug 
+            break;
+        }
+        interest += 0.01;
+    }
+    // returns the monthly payment and interest to use for testing with 1p difference
+    var returnString = "" + current10pc + " Interest: " + interest;
+    return returnString;
+}
 
 module.exports = {
     productSafetyCheck,
-    calcRoundingIssues
+    calcRoundingIssues,
+    findInputvalues1pDifference
 }

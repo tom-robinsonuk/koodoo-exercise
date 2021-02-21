@@ -1,5 +1,7 @@
 const {productSafetyCheck} = require('./main')
 const {calcRoundingIssues} = require('./main')
+const {findInputvalues1pDifference} = require('./main')
+const productList = require('./productList.json')
 
 test('Ensure Repayment Mortgages are not filtered',() => {
     const productList = [{
@@ -21,17 +23,9 @@ test('Ensure Repayment Mortgages are not filtered',() => {
 
 /*Given:
 Repayment mortgage with current monthly payment of 0 (customer has no current mortgage)
-product should be returned*/
+product should be returned
+using the index.js product list*/
 test('Ensure Repayment mortgage with current monthly payment of 0, all products should be returned',() =>{
-    const productList = [{
-            productId:1,
-            repaymentType:"repayment",
-            interestRate:0.1
-       },{
-          productId:2,
-            repaymentType:"interest-only",
-            interestRate:1.2
-         }]
 
     const expectedReturnedProducts = productList
     const currentMonthlyPayment = 0
@@ -134,5 +128,17 @@ test('Products should return correct monthly payment at two decimal places',() =
     const interestRate = 0.01
     expect(calcRoundingIssues(currentMonthlyPayment,loanValue,interestRate)).toEqual(expectedReturnedProducts);
     // new monthly payment calculated as 550.333333333326
+});
+
+/* Find the input values for the 1p difference condition, 
+**Custom function** */
+test('Should return the 1p difference input values',() =>{
+
+    const currentMonthlyPayment = 500;
+    const loanValue = 1000020;
+    const interestRate = 0.01
+    const expectedReturnedProducts = "550 Interest: 0.6600000000000004"
+
+    expect(findInputvalues1pDifference(currentMonthlyPayment,loanValue,interestRate)).toEqual(expectedReturnedProducts);
 });
 
