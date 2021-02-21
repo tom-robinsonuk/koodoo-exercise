@@ -37,7 +37,7 @@ test('Ensure Repayment mortgage with current monthly payment of 0, all products 
 /*Given: That the interest-only mortgage that is 10%  is also returned
 Test script fails: Criteria <10 which is 0 to 9 rather than 0 to 10
 */
-test('Interest-only product where monthly payment works out 10% difference',() =>{
+test('Interest-only products should be returned where the monthly payment works out at 10% difference to their current payment',() =>{
     const productList = [{
         productId:1,
         repaymentType:"interest-only",
@@ -54,7 +54,7 @@ test('Interest-only product where monthly payment works out 10% difference',() =
 /*Given: That the interest-only mortgage that is 9%  is also returned
 Test script pass: Criteria < 9 which is 0 to 9 rather than 0 to 10
 */
-test('Interest-only product where monthly payment works out 9% difference',() =>{
+test('Interest-only products should be returned where the monthly payment works out at 9% difference to their current payment',() =>{
     const productList = [{
         productId:1,
         repaymentType:"interest-only",
@@ -70,7 +70,7 @@ test('Interest-only product where monthly payment works out 9% difference',() =>
 
 /*Given: That the interest-only mortgage that is 5%  is also returned
 */
-test('Interest-only product where monthly payment works out 5% difference',() =>{
+test('Interest-only product should be returned where monthly payment works out at 5% difference to their current payment',() =>{
     const productList = [{
         productId:1,
         repaymentType:"interest-only",
@@ -115,7 +115,7 @@ test('Interest-only products should not be returned where the monthly payment is
 
 /*Given: That products are rounded at two decimal places, since monetary GBP values are always rounded to two decimal places 
 **Custom function** */
-test('Products should return correct monthly payment at two decimal places',() =>{
+test('should return correct product monthly payment at two decimal places',() =>{
     const productList = [{
         productId:1,
         repaymentType:"interest-only",
@@ -131,6 +131,7 @@ test('Products should return correct monthly payment at two decimal places',() =
 });
 
 /* Find the input values for the 1p difference condition, 
+function created for generating input values for use in testing
 **Custom function** */
 test('Should return the 1p difference input values',() =>{
 
