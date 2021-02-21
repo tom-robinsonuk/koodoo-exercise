@@ -1,5 +1,5 @@
 const {productSafetyCheck} = require('./main')
-const {calculateMonthlyPayment} = require('./main')
+const {calcRoundingIssues} = require('./main')
 
 test('Ensure Repayment Mortgages are not filtered',() => {
     const productList = [{
@@ -80,7 +80,7 @@ test('Interest-only product where monthly payment works out 5% difference',() =>
     const productList = [{
         productId:1,
         repaymentType:"interest-only",
-        interestRate:1.217799
+        interestRate:1.22
     }];
 
     const expectedReturnedProducts = productList
@@ -90,35 +90,49 @@ test('Interest-only product where monthly payment works out 5% difference',() =>
     expect(productSafetyCheck(currentMonthlyPayment,loanValue,productList)).toEqual(expectedReturnedProducts)
 });
 
-
-/*Given: That interest-mortgage that is greater than 10% is not returned
+/*Given: That interest-mortgages that are greater than current +10%: interest rate 0.66 works out at  0.01 more than the current +10%
 */
-test('Interest-only should not return product where monthly payment works out 15% difference',() =>{
+test('Interest-only products should not be returned where the monthly payment is more than 10% more than their current payment',() =>{
+    //first product works out to exactly £0.01 more than current + 10%
     const productList = [{
         productId:1,
         repaymentType:"interest-only",
-        interestRate:1.2
-    }];
-
-    const expectedReturnedProducts = productList
-    const currentMonthlyPayment = 200
-    const loanValue = 230000
-
-    expect(productSafetyCheck(currentMonthlyPayment,loanValue,productList)).not.toEqual(expectedReturnedProducts)
-});
-
-/*Given: Interest-only does not return a product if strings are included
-*/
-test('Interest-only, letters should not return a product',() =>{
-    const productList = [{
+        interestRate:0.66
+    },{
+        productId:2,
+        repaymentType:"interest-only",
+        interestRate:1.66
+    },{
         productId:3,
         repaymentType:"interest-only",
-        interestRate:16.5
+        interestRate:2.66
+    },{
+        productId:4,
+        repaymentType:"interest-only",
+        interestRate:23.66
     }];
 
-    const expectedReturnedProducts = productList
-    const currentMonthlyPayment = "abcd"
-    const loanValue = "dgdsfgdsf"
+    const expectedReturnedProducts = [];
+    const currentMonthlyPayment = 500
+    const loanValue = 1000020
 
-    expect(productSafetyCheck(currentMonthlyPayment,loanValue,productList)).not.toEqual(expectedReturnedProducts)
+    expect(productSafetyCheck(currentMonthlyPayment,loanValue,productList)).toEqual(expectedReturnedProducts)
 });
+
+/*Given: That products are rounded at two decimal places, since monetary GBP values are always rounded to two decimal places 
+**Custom function** */
+test('Products should return correct monthly payment at two decimal places',() =>{
+    const productList = [{
+        productId:1,
+        repaymentType:"interest-only",
+        interestRate:0.01
+    }]
+
+    const expectedReturnedProducts = 550.33
+    const currentMonthlyPayment = 500.30;
+    const loanValue = 40000;
+    const interestRate = 0.01
+    expect(calcRoundingIssues(currentMonthlyPayment,loanValue,interestRate)).toEqual(expectedReturnedProducts);
+    // new monthly payment calculated as 550.333333333326
+});
+
